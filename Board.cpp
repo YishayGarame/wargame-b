@@ -7,38 +7,29 @@ using namespace WarGame;
 
 Soldier *&Board::operator[](std::pair<int, int> location)
 {
-    if (location.first >= board.size() || location.second >= board[0].size())
-    {
-        throw runtime_error("location is out of bounds");
-    }
-    if (board[location.first][location.second] != nullptr)
-    {
-        throw runtime_error("There is already a soldier in this location ");
-    }
     return board[location.first][location.second];
 }
 
 Soldier *Board::operator[](std::pair<int, int> location) const
 {
-    if (location.first >= board.size() || location.second >= board[0].size())
-    {
-        throw runtime_error("location is out of bounds");
-    }
-    if (board[location.first][location.second] == nullptr)
-    {
-        throw runtime_error("There is no soldier in this location ");
-    }
-    //  board[location.first][location.second]->location
     return board[location.first][location.second];
 }
 
 void Board::move(uint player_number, std::pair<int, int> source, MoveDIR direction)
 {
-    if (board[source.first][source.second] == nullptr ||
-        board[source.first][source.second]->player_number != player_number)
+    if (source.first >= board.size() || source.first < 0 || source.second >= board.size() || source.second < 0)
     {
-        throw runtime_error("std::invalid_argument ");
+        throw std::invalid_argument("Invalid source input");
     }
+    if (board[source.first][source.second] == nullptr)
+    {
+        throw std::invalid_argument("Invalid source input");
+    }
+    if (board[source.first][source.second]->player_number != player_number)
+    {
+        throw std::invalid_argument("not the same team player");
+    }
+
     int i = source.first;
     int j = source.second;
     int lengthI = board.size();
@@ -51,7 +42,7 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
 
         if (((i + 1) >= lengthI) || (board[i + 1][j] != nullptr))
         {
-            throw std::runtime_error("std::invalid_argument ");
+            throw std::runtime_error("std::invalid_argument2 ");
         }
         else
         {
@@ -61,8 +52,6 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
             Soldier *temp = board[i][j];
             board[i + 1][j] = temp;
             board[i][j] = nullptr;
-            //cout << board[i + 1][j]->health << endl;
-
             temp->action(board, location);
         }
         break;
@@ -70,7 +59,7 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
     case (Down):
         if (((i - 1) < 0) || board[i - 1][j] != nullptr)
         {
-            throw runtime_error("std::invalid_argument ");
+            throw runtime_error("std::invalid_argument3 ");
         }
         else
         {
@@ -86,7 +75,7 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
     case (Left):
         if (((j - 1) < 0) || board[i][j - 1] != nullptr)
         {
-            throw runtime_error("std::invalid_argument ");
+            throw runtime_error("std::invalid_argument4 ");
         }
         else
         {
@@ -102,7 +91,7 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
     case (Right):
         if (((j + 1) >= lengthJ) || board[i][j + 1] != nullptr)
         {
-            throw runtime_error("std::invalid_argument ");
+            throw runtime_error("std::invalid_argument 5");
         }
         else
         {

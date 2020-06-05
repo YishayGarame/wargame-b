@@ -21,10 +21,10 @@ Sniper::Sniper(uint i)
 void Sniper::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
 
-    int maxHealth = 0;
+    int maxHealth = -1;
     int tempMaxHealth;
-    int tarX;
-    int tarY;
+    int tarX = -1;
+    int tarY = -1;
 
     //soldier loctaion
     int xLoc = loaction.first;
@@ -33,11 +33,10 @@ void Sniper::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, i
     //check the stronger soldier
     for (int i = 0; i < board.size(); i++)
     {
-        for (int j = 0; j < board[j].size(); j++)
+        for (int j = 0; j < board[i].size(); j++)
         {
             if (board[i][j] != nullptr)
             {
-
                 if ((board[i][j]->player_number != board[xLoc][yLoc]->player_number))
                 {
                     tempMaxHealth = board[i][j]->health;
@@ -51,16 +50,20 @@ void Sniper::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, i
             }
         }
     }
-
-    //we have the maxHelath and the target location
-    if (board[tarX][tarY] != nullptr)
+    if (tarX != -1 && tarY != -1)
     {
-        board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
-        // cout << board[tarX][tarY]->type << "has that point of health " << board[tarX][tarY]->health << endl;
-        if (board[tarX][tarY]->health <= 0)
+        //we have the maxHelath and the target location
+        if (board[tarX][tarY] != nullptr)
         {
-            // delete board[tarX][tarY];
-            board[tarX][tarY] = nullptr;
+
+            if (board[tarX][tarY]->health <= this->damage)
+            {
+                board[tarX][tarY] = nullptr;
+            }
+            else
+            {
+                board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
+             }
         }
     }
 }

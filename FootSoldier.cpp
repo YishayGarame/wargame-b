@@ -20,10 +20,11 @@ FootSoldier::FootSoldier(uint i)
 }
 void FootSoldier::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
-    int mindis = INT_MAX;
-    int tempdis;
-    int tarX;
-    int tarY;
+
+    double mindis = 1000000;
+    double tempdis;
+    int tarX = -1;
+    int tarY = -1;
 
     //soldier loctaion
     int xLoc = loaction.first;
@@ -39,6 +40,7 @@ void FootSoldier::action(std::vector<std::vector<Soldier *>> &board, std::pair<i
 
                 if ((board[i][j]->player_number != board[xLoc][yLoc]->player_number))
                 {
+
                     tempdis = checkDistance(xLoc, yLoc, i, j);
                     if (tempdis < mindis)
                     {
@@ -50,21 +52,26 @@ void FootSoldier::action(std::vector<std::vector<Soldier *>> &board, std::pair<i
             }
         }
     }
-
-    //we have the mindis and the target location
-    if (board[tarX][tarY] != nullptr)
+    if (tarX != -1 && tarY != -1)
     {
-        board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
-        if (board[tarX][tarY]->health <= 0)
+        //we have the mindis and the target location
+        if (board[tarX][tarY] != nullptr)
         {
-            //  delete board[tarX][tarY];
-            board[tarX][tarY] = nullptr;
+
+            if (board[tarX][tarY]->health <= this->damage)
+            {
+                board[tarX][tarY] = nullptr;
+            }
+            else
+            {
+                board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
+            }
         }
     }
 }
 
-int FootSoldier::checkDistance(int xLoc, int yLoc, int i, int j)
+double FootSoldier::checkDistance(int xLoc, int yLoc, int i, int j)
 {
-    int ans = abs(xLoc - i) + abs((yLoc - j));
+    double ans = sqrt((xLoc - i) * (xLoc - i) + (yLoc - j) * (yLoc - j));
     return ans;
 }

@@ -7,7 +7,7 @@ using namespace std;
 class SniperCommander : public Soldier
 {
 public:
-    static const uint max_health = 100;
+    static const uint max_health = 120;
     SniperCommander();
     SniperCommander(uint player_number);
     int get_maxHealth();

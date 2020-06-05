@@ -20,10 +20,10 @@ SniperCommander::SniperCommander(uint i)
 void SniperCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
 
-    int maxHealth = 0;
+    int maxHealth = -1;
     int tempMaxHealth;
-    int tarX;
-    int tarY;
+    int tarX = -1;
+    int tarY = -1;
     std::pair<int, int> locationSoldier;
 
     //soldier loctaion
@@ -50,18 +50,22 @@ void SniperCommander::action(std::vector<std::vector<Soldier *>> &board, std::pa
             }
         }
     }
-
-    //we have the maxHelath and the target location
-    if (board[tarX][tarY] != nullptr)
+    if (tarX != -1 && tarY != -1)
     {
-        board[tarX][tarY]->health -= this->damage;
-        if (board[tarX][tarY]->health <= 0)
+        //we have the maxHelath and the target location
+        if (board[tarX][tarY] != nullptr)
         {
-            board[tarX][tarY] = nullptr;
-            // delete ~Soldier;
+
+            if (board[tarX][tarY]->health <= this->damage)
+            {
+                board[tarX][tarY] = nullptr;
+            }
+            else
+            {
+                board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
+            }
         }
     }
-
     //activate its own snipers soldiers
     for (int i = 0; i < board.size(); i++)
     {

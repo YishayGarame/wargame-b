@@ -14,5 +14,5 @@ public:
     ~FootSoldier(){};
     virtual int get_maxHealth();
     virtual void action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction);
-    int checkDistance(int xLoc, int yLoc, int i, int j);
+    virtual double checkDistance(int xLoc, int yLoc, int i, int j);
 };

@@ -28,7 +28,7 @@ void Paramedic::action(std::vector<std::vector<Soldier *>> &board, std::pair<int
     {
         for (int j = 0; j < board[i].size(); j++)
         {
-            if (board[i][j] != nullptr)
+            if (board[i][j] != nullptr && board[xLoc][yLoc] != nullptr)
             {
                 if (board[i][j]->player_number == board[xLoc][yLoc]->player_number)
                 {
@@ -42,7 +42,7 @@ void Paramedic::action(std::vector<std::vector<Soldier *>> &board, std::pair<int
                     if ((i == xLoc - 1 && j == yLoc - 1) || (i == xLoc + 1 && j == yLoc + 1) ||
                         ((i == xLoc - 1 && j == yLoc + 1) || (i == xLoc + 1 && j == yLoc - 1)))
                     {
-                        board[i][j]->health = this->max_health;
+                        board[i][j]->health = board[i][j]->get_maxHealth();
                     }
                 }
             }

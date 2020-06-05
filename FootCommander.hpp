@@ -12,6 +12,7 @@ public:
     FootCommander();
     FootCommander(uint player_number);
     int get_maxHealth();
+    double checkDistance(int xLoc, int yLoc, int i, int j);
     ~FootCommander(){};
     void action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction);
 };

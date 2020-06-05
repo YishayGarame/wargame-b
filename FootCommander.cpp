@@ -19,10 +19,10 @@ int FootCommander::get_maxHealth()
 }
 void FootCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
-    int mindis = INT_MAX;
-    int tempdis;
-    int tarX;
-    int tarY;
+    double mindis = 1000000;
+    double tempdis;
+    int tarX = -1;
+    int tarY = -1;
     std::pair<int, int> locationSoldier;
 
     //soldier loctaion
@@ -52,12 +52,19 @@ void FootCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair
         }
     }
     //we have the mindis and the target location
-    board[tarX][tarY]->health -= this->damage;
-    if (board[tarX][tarY]->health <= 0)
+
+    if (tarX != -1 && tarY != -1)
     {
-        board[tarX][tarY] = nullptr;
-        //delete soldier
+        if (board[tarX][tarY]->health <= this->damage)
+        {
+            board[tarX][tarY] = nullptr;
+        }
+        else
+        {
+            board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
+        }
     }
+
     //activate its own soldiers
     for (int i = 0; i < board.size(); i++)
     {
@@ -68,8 +75,10 @@ void FootCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair
                 if (board[i][j]->type == "FootSoldier" && board[i][j]->player_number == this->player_number)
                 {
                     //Soldier *s = board[i][j];
+
                     locationSoldier.first = i;
                     locationSoldier.second = j;
+
                     board[i][j]->action(board, locationSoldier);
                 }
             }
@@ -77,8 +86,8 @@ void FootCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair
     }
 }
 
-int checkDistance(int xLoc, int yLoc, int i, int j)
+double FootCommander::checkDistance(int xLoc, int yLoc, int i, int j)
 {
-    int ans = abs(xLoc - i) + abs(yLoc - j);
+    double ans = sqrt((xLoc - i) * (xLoc - i) + (yLoc - j) * (yLoc - j));
     return ans;
 }
