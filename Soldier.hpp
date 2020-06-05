@@ -14,5 +14,6 @@ public:
     string type;
     Soldier(){};
     virtual void action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction) = 0;
+    virtual int get_maxHealth() = 0;
     virtual ~Soldier(){};
 };

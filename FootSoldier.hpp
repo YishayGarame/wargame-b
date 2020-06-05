@@ -2,8 +2,8 @@
 #include <vector>
 #include <stdexcept>
 using namespace std;
-#include "Soldier.hpp"
 #pragma once
+#include "Soldier.hpp"
 
 class FootSoldier : public Soldier
 {
@@ -12,6 +12,7 @@ public:
     FootSoldier();
     FootSoldier(uint player_number);
     ~FootSoldier(){};
+    virtual int get_maxHealth();
     virtual void action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction);
     int checkDistance(int xLoc, int yLoc, int i, int j);
 };

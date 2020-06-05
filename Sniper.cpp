@@ -1,10 +1,16 @@
 #include <string>
 #include <vector>
+#include <iostream>
 #include <stdexcept>
 using namespace std;
 #include "Sniper.hpp"
 
 Sniper::Sniper(){};
+int Sniper::get_maxHealth()
+{
+    return max_health;
+}
+
 Sniper::Sniper(uint i)
 {
     health = 100;
@@ -15,7 +21,7 @@ Sniper::Sniper(uint i)
 void Sniper::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
 
-    int maxHelath = 0;
+    int maxHealth = 0;
     int tempMaxHealth;
     int tarX;
     int tarY;
@@ -27,27 +33,34 @@ void Sniper::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, i
     //check the stronger soldier
     for (int i = 0; i < board.size(); i++)
     {
-        for (int j = 0; j < board[0].size(); j++)
+        for (int j = 0; j < board[j].size(); j++)
         {
-            if (board[i][j] != nullptr && (board[i][j]->player_number != board[xLoc][yLoc]->player_number))
+            if (board[i][j] != nullptr)
             {
-                tempMaxHealth = board[i][j]->health;
-                if (tempMaxHealth > maxHelath)
+
+                if ((board[i][j]->player_number != board[xLoc][yLoc]->player_number))
                 {
-                    maxHelath = tempMaxHealth;
-                    tarX = i;
-                    tarY = j;
+                    tempMaxHealth = board[i][j]->health;
+                    if (tempMaxHealth > maxHealth)
+                    {
+                        maxHealth = tempMaxHealth;
+                        tarX = i;
+                        tarY = j;
+                    }
                 }
             }
         }
     }
 
     //we have the maxHelath and the target location
-    board[tarX][tarY]->health -= this->damage;
-    if (board[tarX][tarY]->health <= 0)
+    if (board[tarX][tarY] != nullptr)
     {
-        //i want to check if board.hassoldiers but do know how
-        board[tarX][tarY] = nullptr;
-        // delete ~Soldier;
+        board[tarX][tarY]->health = board[tarX][tarY]->health - this->damage;
+        // cout << board[tarX][tarY]->type << "has that point of health " << board[tarX][tarY]->health << endl;
+        if (board[tarX][tarY]->health <= 0)
+        {
+            // delete board[tarX][tarY];
+            board[tarX][tarY] = nullptr;
+        }
     }
 }

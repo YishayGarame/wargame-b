@@ -4,6 +4,10 @@
 using namespace std;
 #include "ParamedicCommander.hpp"
 
+int ParamedicCommander::get_maxHealth()
+{
+    return max_health;
+}
 ParamedicCommander::ParamedicCommander(){};
 ParamedicCommander::ParamedicCommander(uint i)
 {
@@ -26,19 +30,22 @@ void ParamedicCommander::action(std::vector<std::vector<Soldier *>> &board, std:
         for (int j = 0; j < board[i].size(); j++)
         {
             //check if the same team
-            if (board[i][j] != nullptr && board[i][j]->player_number == board[xLoc][yLoc]->player_number)
+            if (board[i][j] != nullptr)
             {
-                //check if its around the paramedic location
-                if (((i == xLoc - 1 && j == yLoc) || (i == xLoc + 1) ||
-                     (j == yLoc - 1 && i == xLoc) || (j == yLoc + 1 && i == xLoc)))
+                if (board[i][j]->player_number == board[xLoc][yLoc]->player_number)
                 {
-                    board[i][j]->health = this->max_health;
-                }
-                //if its diagnosed to its loctaion
-                if ((i == xLoc - 1 && j == yLoc - 1) || (i == xLoc + 1 && j == yLoc + 1) ||
-                    ((i == xLoc - 1 && j == yLoc + 1) || (i == xLoc + 1 && j == yLoc - 1)))
-                {
-                    board[i][j]->health = this->max_health;
+                    //check if its around the paramedic location
+                    if (((i == xLoc - 1 && j == yLoc) || (i == xLoc + 1) ||
+                         (j == yLoc - 1 && i == xLoc) || (j == yLoc + 1 && i == xLoc)))
+                    {
+                        board[i][j]->health = board[i][j]->get_maxHealth();
+                    }
+                    //if its diagnosed to its loctaion
+                    if ((i == xLoc - 1 && j == yLoc - 1) || (i == xLoc + 1 && j == yLoc + 1) ||
+                        ((i == xLoc - 1 && j == yLoc + 1) || (i == xLoc + 1 && j == yLoc - 1)))
+                    {
+                        board[i][j]->health = this->max_health;
+                    }
                 }
             }
         }
@@ -49,12 +56,14 @@ void ParamedicCommander::action(std::vector<std::vector<Soldier *>> &board, std:
     {
         for (int j = 0; j < board[0].size(); j++)
         {
-            //board[i][j] != NULL &&
-            if (board[i][j] != nullptr && board[i][j]->type == "Paramedic" && this->player_number == board[i][j]->player_number)
+            if (board[i][j] != nullptr)
             {
-                locationSoldier.first = i;
-                locationSoldier.second = j;
-                board[i][j]->action(board, locationSoldier);
+                if (board[i][j]->type == "Paramedic" && this->player_number == board[i][j]->player_number)
+                {
+                    locationSoldier.first = i;
+                    locationSoldier.second = j;
+                    board[i][j]->action(board, locationSoldier);
+                }
             }
         }
     }

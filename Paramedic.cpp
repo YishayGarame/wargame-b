@@ -5,6 +5,10 @@ using namespace std;
 #include "Paramedic.hpp"
 
 Paramedic::Paramedic(){};
+int Paramedic::get_maxHealth()
+{
+    return max_health;
+}
 Paramedic::Paramedic(uint i)
 {
     health = 100;
@@ -24,20 +28,22 @@ void Paramedic::action(std::vector<std::vector<Soldier *>> &board, std::pair<int
     {
         for (int j = 0; j < board[i].size(); j++)
         {
-            //check if the same team
-            if (board[i][j] != nullptr && board[i][j]->player_number == board[xLoc][yLoc]->player_number)
+            if (board[i][j] != nullptr)
             {
-                //check if its around the paramedic location
-                if (((i == xLoc - 1 && j == yLoc) || (i == xLoc + 1) ||
-                     (j == yLoc - 1 && i == xLoc) || (j == yLoc + 1 && i == xLoc)))
+                if (board[i][j]->player_number == board[xLoc][yLoc]->player_number)
                 {
-                    board[i][j]->health = this->max_health;
-                }
-                //if its diagnosed to its loctaion
-                if ((i == xLoc - 1 && j == yLoc - 1) || (i == xLoc + 1 && j == yLoc + 1) ||
-                    ((i == xLoc - 1 && j == yLoc + 1) || (i == xLoc + 1 && j == yLoc - 1)))
-                {
-                    board[i][j]->health = this->max_health;
+                    //check if its around the paramedic location
+                    if (((i == xLoc - 1 && j == yLoc) || (i == xLoc + 1 && j == yLoc) ||
+                         (j == yLoc - 1 && i == xLoc) || (j == yLoc + 1 && i == xLoc)))
+                    {
+                        board[i][j]->health = this->max_health;
+                    }
+                    //if its diagnosed to its loctaion
+                    if ((i == xLoc - 1 && j == yLoc - 1) || (i == xLoc + 1 && j == yLoc + 1) ||
+                        ((i == xLoc - 1 && j == yLoc + 1) || (i == xLoc + 1 && j == yLoc - 1)))
+                    {
+                        board[i][j]->health = this->max_health;
+                    }
                 }
             }
         }

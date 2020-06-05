@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include "Board.hpp"
+#include <iostream>
 using namespace WarGame;
 
 Soldier *&Board::operator[](std::pair<int, int> location)
@@ -44,7 +45,6 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
     int lengthJ = board[0].size();
 
     std::pair<int, int> location;
-
     switch (direction)
     {
     case (Up):
@@ -61,6 +61,8 @@ void Board::move(uint player_number, std::pair<int, int> source, MoveDIR directi
             Soldier *temp = board[i][j];
             board[i + 1][j] = temp;
             board[i][j] = nullptr;
+            //cout << board[i + 1][j]->health << endl;
+
             temp->action(board, location);
         }
         break;
@@ -124,7 +126,9 @@ bool Board::has_soldiers(uint player_number) const
             if (board[i][j] != nullptr)
             {
                 if (board[i][j]->player_number == player_number)
+                {
                     return true;
+                }
             }
         }
     }

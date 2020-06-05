@@ -1,9 +1,14 @@
 #include <string>
 #include <vector>
+#include <iostream>
 #include <stdexcept>
 using namespace std;
 #include "SniperCommander.hpp"
 
+int SniperCommander::get_maxHealth()
+{
+    return max_health;
+}
 SniperCommander::SniperCommander(){};
 SniperCommander::SniperCommander(uint i)
 {
@@ -15,7 +20,7 @@ SniperCommander::SniperCommander(uint i)
 void SniperCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
 
-    int maxHelath = 0;
+    int maxHealth = 0;
     int tempMaxHealth;
     int tarX;
     int tarY;
@@ -28,41 +33,48 @@ void SniperCommander::action(std::vector<std::vector<Soldier *>> &board, std::pa
     //check the stronger soldier
     for (int i = 0; i < board.size(); i++)
     {
-        for (int j = 0; j < board[0].size(); j++)
+        for (int j = 0; j < board[i].size(); j++)
         {
-            if (board[i][j] != nullptr && (board[i][j]->player_number != board[xLoc][yLoc]->player_number))
+            if (board[i][j] != nullptr)
             {
-                tempMaxHealth = board[i][j]->health;
-                if (tempMaxHealth > maxHelath)
+                if ((board[i][j]->player_number != board[xLoc][yLoc]->player_number))
                 {
-                    maxHelath = tempMaxHealth;
-                    tarX = i;
-                    tarY = j;
+                    tempMaxHealth = board[i][j]->health;
+                    if (tempMaxHealth > maxHealth)
+                    {
+                        maxHealth = tempMaxHealth;
+                        tarX = i;
+                        tarY = j;
+                    }
                 }
             }
         }
     }
 
     //we have the maxHelath and the target location
-    board[tarX][tarY]->health -= this->damage;
-    if (board[tarX][tarY]->health <= 0)
+    if (board[tarX][tarY] != nullptr)
     {
-        //i want to check if board.hassoldiers but do know how
-        board[tarX][tarY] = nullptr;
-        // delete ~Soldier;
+        board[tarX][tarY]->health -= this->damage;
+        if (board[tarX][tarY]->health <= 0)
+        {
+            board[tarX][tarY] = nullptr;
+            // delete ~Soldier;
+        }
     }
 
     //activate its own snipers soldiers
     for (int i = 0; i < board.size(); i++)
     {
-        for (int j = 0; j < board[0].size(); j++)
+        for (int j = 0; j < board[i].size(); j++)
         {
-            //board[i][j] != NULL &&
-            if (board[i][j] != nullptr && board[i][j]->type == "Sniper" && board[i][j]->player_number == this->player_number)
+            if (board[i][j] != nullptr)
             {
-                locationSoldier.first = i;
-                locationSoldier.second = j;
-                board[i][j]->action(board, locationSoldier);
+                if (board[i][j]->type == "Sniper" && board[i][j]->player_number == this->player_number)
+                {
+                    locationSoldier.first = i;
+                    locationSoldier.second = j;
+                    board[i][j]->action(board, locationSoldier);
+                }
             }
         }
     }

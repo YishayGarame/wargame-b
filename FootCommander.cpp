@@ -13,6 +13,10 @@ FootCommander::FootCommander(uint i)
     player_number = i;
     type = "FootCommander";
 }
+int FootCommander::get_maxHealth()
+{
+    return max_health;
+}
 void FootCommander::action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction)
 {
     int mindis = INT_MAX;

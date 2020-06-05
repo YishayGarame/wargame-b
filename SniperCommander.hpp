@@ -10,6 +10,7 @@ public:
     static const uint max_health = 100;
     SniperCommander();
     SniperCommander(uint player_number);
+    int get_maxHealth();
     ~SniperCommander(){};
     void action(std::vector<std::vector<Soldier *>> &board, std::pair<int, int> loaction);
 };
